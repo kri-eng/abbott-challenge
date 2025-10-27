@@ -9,6 +9,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 32, 78, 109),
+        ),
         body: Text("Example Text!"),
       ),
     );
