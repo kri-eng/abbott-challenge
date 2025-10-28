@@ -1,3 +1,4 @@
+import 'package:challenge/ui/core/ui/button_widget.dart';
 import 'package:challenge/ui/heart/view_model/heart_view_model.dart';
 import 'package:challenge/ui/heart/widgets/percentage_text.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,25 @@ class _HeartScreenState extends State<HeartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ValueListenableBuilder(
-        valueListenable: heartVM.percentage, 
-        builder: (context, value, _) {
-          return PercentageText(amount: value);
-        }
-      ),
+    return ValueListenableBuilder(
+      valueListenable: heartVM.percentage, 
+      builder: (context, value, _) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PercentageText(amount: value),
+            if (value == 100)
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: const ButtonWidget(buttonText: "Clear"),
+              ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: const ButtonWidget(buttonText: "Next"),
+            ),
+          ],
+        );
+      }
     );
   }
 }
