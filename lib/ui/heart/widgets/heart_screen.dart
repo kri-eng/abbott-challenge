@@ -48,7 +48,7 @@ class _HeartScreenState extends State<HeartScreen> {
   void handleNextClick() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => SuccessScreen()
+        builder: (ctx) => const SuccessScreen()
       ),
     );
   }
@@ -78,7 +78,12 @@ class _HeartScreenState extends State<HeartScreen> {
                 children: [
                   Expanded( // Ensures that Text and Heart Widget stays togather and in bound.
                     child: Center(
-                      child: PercentageText(amount: value)
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          PercentageText(amount: value)
+                        ],
+                      ),
                     ),
                   ),
                   Padding(  // Ensures that bottom padding is applied to the buttons.
