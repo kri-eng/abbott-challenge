@@ -34,6 +34,14 @@ class HeartViewModel {
     percentage.value = 0;
   }
 
+  /// pauseCounter
+  /// 
+  /// Cancel the current timer and keep the percentage value
+  /// as the last value.
+  void pauseCounter() {
+    _timer?.cancel();
+  }
+
   /// dispose
   /// 
   /// Called when ViewModel is no longer needed.

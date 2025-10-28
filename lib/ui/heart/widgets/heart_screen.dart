@@ -1,5 +1,6 @@
 import 'package:challenge/ui/core/ui/button_widget.dart';
 import 'package:challenge/ui/heart/view_model/heart_view_model.dart';
+import 'package:challenge/ui/heart/widgets/heart_widget_painter.dart';
 import 'package:challenge/ui/heart/widgets/percentage_text.dart';
 import 'package:challenge/ui/success/widgets/success_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +26,14 @@ class HeartScreen extends StatefulWidget {
 }
 
 class _HeartScreenState extends State<HeartScreen> {
+  
   late final HeartViewModel heartVM; // Initialized in initState(), and is a final value.
-
+  var timerRunning = false; // 0 means need to start.
 
   @override
   void initState() {  // Initializes the state and ViewModel.
     super.initState();
     heartVM = HeartViewModel();
-    heartVM.startCounter();
   }
 
   @override
@@ -59,7 +60,28 @@ class _HeartScreenState extends State<HeartScreen> {
   /// Invoked when Clear Button is clicked.
   void handleClearClick() {
     heartVM.resetCounter(); // Reset the percentage counter.
-    heartVM.startCounter(); 
+    setState(() { // Reset timerRunning to false.
+      timerRunning = false;
+    });
+  }
+
+
+  /// handleHeartTap
+  /// 
+  /// Function used to handle the state of timer, when heart is tapped.
+  /// Invoked when heart is tapped on.
+  void handleHeartTap() {
+    if (timerRunning) {
+      heartVM.pauseCounter();
+      setState(() {
+        timerRunning = false;
+      });
+    } else {
+      heartVM.startCounter();
+      setState(() {
+        timerRunning = true;
+      });
+    }
   }
 
   @override
@@ -81,7 +103,20 @@ class _HeartScreenState extends State<HeartScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          PercentageText(amount: value)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.82,
+                            height: MediaQuery.of(context).size.height * 0.45,
+                            child: InkWell(
+                              onTap: handleHeartTap,
+                              child: CustomPaint(
+                                painter: HeartWidgetPainter(percentage: value),
+                                size: Size(MediaQuery.of(context).size.width * 0.80, MediaQuery.of(context).size.height * 0.40), // 👈 Send size here
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15,),
+                          PercentageText(amount: value),
+                          const SizedBox(height: 60,),
                         ],
                       ),
                     ),
