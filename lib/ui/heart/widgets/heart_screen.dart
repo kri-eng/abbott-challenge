@@ -57,7 +57,10 @@ class _HeartScreenState extends State<HeartScreen> {
   ///
   /// Function used to reset the timer and percentage.
   /// Invoked when Clear Button is clicked.
-  void handleClearClick() {}
+  void handleClearClick() {
+    heartVM.resetCounter(); // Reset the percentage counter.
+    heartVM.startCounter(); 
+  }
 
   @override
   Widget build(BuildContext context) {

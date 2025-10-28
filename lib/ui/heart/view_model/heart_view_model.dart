@@ -25,6 +25,15 @@ class HeartViewModel {
     });
   }
 
+  /// resetCounter
+  /// 
+  /// Cancel the timer, and sets percentage value to 0.
+  /// INvoked when Clear button is clicked.
+  void resetCounter() {
+    _timer?.cancel();
+    percentage.value = 0;
+  }
+
   /// dispose
   /// 
   /// Called when ViewModel is no longer needed.
