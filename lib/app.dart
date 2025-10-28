@@ -1,3 +1,4 @@
+import 'package:challenge/ui/heart/widgets/heart_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 32, 78, 109),
         ),
-        body: Text("Example Text!"),
+        body: HeartScreen(),
       ),
     );
   }
