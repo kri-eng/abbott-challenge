@@ -1,6 +1,7 @@
 import 'package:challenge/ui/core/ui/button_widget.dart';
 import 'package:challenge/ui/heart/view_model/heart_view_model.dart';
 import 'package:challenge/ui/heart/widgets/percentage_text.dart';
+import 'package:challenge/ui/success/widgets/success_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -44,7 +45,13 @@ class _HeartScreenState extends State<HeartScreen> {
   ///
   /// Function used to navigate to the Success Screen State.
   /// Invoked when Next Button is clicked.
-  void handleNextClick() {}
+  void handleNextClick() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (ctx) => SuccessScreen()
+      ),
+    );
+  }
 
   /// handleClearClick
   ///
@@ -67,7 +74,7 @@ class _HeartScreenState extends State<HeartScreen> {
                 ),
               ),
               Padding(  // Ensures that bottom padding is applied to the buttons.
-                padding: const EdgeInsetsGeometry.only(bottom: 30),
+                padding: const EdgeInsetsGeometry.only(bottom: 40),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
