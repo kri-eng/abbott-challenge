@@ -28,6 +28,10 @@ class _HeartScreenState extends State<HeartScreen> {
     super.dispose();
   }
 
+  void handleNextClick() {}
+
+  void handleClearClick() {}
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -49,13 +53,19 @@ class _HeartScreenState extends State<HeartScreen> {
                   children: [
                     if (value == 100)
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: const ButtonWidget(buttonText: "Clear"),
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: ButtonWidget(
+                          buttonText: "Clear", 
+                          onClick: handleClearClick,
+                        ),
                       ),
                     const SizedBox(height: 12,),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: const ButtonWidget(buttonText: "Next"),
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: ButtonWidget(
+                        buttonText: "Next", 
+                        onClick: (value != 100) ? null : handleNextClick,
+                      ),
                     ),
                   ],
                 ),
