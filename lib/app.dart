@@ -13,7 +13,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 32, 78, 109),
         ),
-        body: HeartScreen(),
+        body: SafeArea(
+          child: HeartScreen()
+        ),
       ),
     );
   }

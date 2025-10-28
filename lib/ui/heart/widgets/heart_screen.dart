@@ -33,20 +33,35 @@ class _HeartScreenState extends State<HeartScreen> {
     return ValueListenableBuilder(
       valueListenable: heartVM.percentage, 
       builder: (context, value, _) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PercentageText(amount: value),
-            if (value == 100)
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: const ButtonWidget(buttonText: "Clear"),
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Center(
+                  child: PercentageText(amount: value)
+                ),
               ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: const ButtonWidget(buttonText: "Next"),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsetsGeometry.only(bottom: 30),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (value == 100)
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: const ButtonWidget(buttonText: "Clear"),
+                      ),
+                    const SizedBox(height: 12,),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: const ButtonWidget(buttonText: "Next"),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         );
       }
     );
