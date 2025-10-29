@@ -37,7 +37,22 @@ class HeartWidgetPainter extends CustomPainter {
     canvas.drawPath(path!, bgPaint);
 
     canvas.save();
-    canvas.clipRect(Rect.fromLTWH(0, size.height * (1 - percentage / 100), size.width, size.height * percentage / 100));
+    
+    // The heart spans from height * 0.05 (top) to height * 1.0 (bottom)
+    double heartTop = size.height * 0.25;
+    double heartBottom = size.height;
+    double heartHeight = heartBottom - heartTop;
+    
+    // Calculate how much of the heart to fill from bottom
+    double fillHeight = heartHeight * (percentage / 100);
+    double clipTop = heartBottom - fillHeight;
+    
+    canvas.clipRect(Rect.fromLTWH(
+      0,
+      clipTop, 
+      size.width,
+      fillHeight
+    ));
     canvas.drawPath(path!, fillPaint);
     canvas.restore();
   } 

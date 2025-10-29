@@ -49,6 +49,7 @@ class _HeartScreenState extends State<HeartScreen> {
 
     return Scaffold( // Set up Scaffold and the appBar with custom color.
       appBar: AppBar(
+        toolbarHeight: 20.0,
         backgroundColor: Color.fromARGB(255, 32, 78, 109),
       ),
       body: SafeArea( // Define safe area and then display child widget.
