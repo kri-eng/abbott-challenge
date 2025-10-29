@@ -1,10 +1,15 @@
 import 'package:challenge/ui/core/ui/button_widget.dart';
 import 'package:flutter/material.dart';
 
+/// SuccessScreen
+///
+/// The second screen of the challenge that dispays the SUCCESS message.
+/// The screen does not have a viewModal as the screen does not share any responsibility,
+/// apart from simple routing, which is done using Navigator.pop().
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({super.key});
 
-  void handleBackClick(BuildContext ctx) {
+  void handleBackClick(BuildContext ctx) {  // Pops the Success Screen from the stack
     Navigator.of(ctx).pop();
   }
 
@@ -26,12 +31,13 @@ class SuccessScreen extends StatelessWidget {
                   child: Text(
                     "SUCCESS!",
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold
                     ),
                   ),
                 )
               ),
+              SizedBox(height: 80,),
               Padding(  // Ensures that bottom padding is applied to the buttons.
                 padding: const EdgeInsetsGeometry.only(bottom: 40),
                 child: SizedBox(

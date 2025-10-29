@@ -1,40 +1,46 @@
 import 'package:challenge/ui/heart/widgets/heart_widget_painter.dart';
 import 'package:flutter/material.dart';
 
-class HeartTapableWidget extends StatefulWidget {
-  const HeartTapableWidget({super.key, required this.percentage, required this.onTap});
+/// HeartTapableWidget
+/// 
+/// One of the core and imporant widget in order to allow Gesture Dectection for the heart.
+/// This allows for pausing and resuming the timer/percentage change. The Widget takes in the the 
+/// current percentage and a callback which will be called when gesture like onTap is dected.
+/// 
+/// The widget was intially a statefulWidget, which persisted the global key, however LayoutBuilder was
+/// utlized as a cleaner workaround the issue.
+/// 
+/// 
+class HeartTapableWidget extends StatelessWidget {
+  const HeartTapableWidget({super.key, required this.percentage, required this.onTap}); // Constructor.
 
   final int percentage;
   final void Function() onTap;
 
   @override
-  State<HeartTapableWidget> createState() {
-    return _HeartTapableWidgetState();
-  }
-}
-
-class _HeartTapableWidgetState extends State<HeartTapableWidget> {
-  final GlobalKey _widgetKey = GlobalKey();
-  late HeartWidgetPainter painter;
-    
-  @override
   Widget build(BuildContext context) {
-    final painter = HeartWidgetPainter(percentage: widget.percentage);
+    return LayoutBuilder( // Prvoides the context to generate the renderBox.
+      builder: (context, constraints) {
+        final painter = HeartWidgetPainter(percentage: percentage); // Intializes the painter.
+        
+        return GestureDetector( // Returns a GestureDetector Widget
+          onTapDown: (details) {  // Activates on tap down.
+            final renderBox = context.findRenderObject() as RenderBox;
+            final localPos = renderBox.globalToLocal(details.globalPosition); // Gets the local coordinates.
 
-    return GestureDetector(
-      onTapDown: (details) {
-        final renderBox = _widgetKey.currentContext!.findRenderObject() as RenderBox;
-        final localPos = renderBox.globalToLocal(details.globalPosition);
-
-        if (painter.path != null && painter.path!.contains(localPos)) {
-          widget.onTap();
-        }
+            if (painter.path != null && painter.path!.contains(localPos)) { // If local coordinates in the current path of painter
+              onTap();  // then activate the callback.
+            } 
+          },
+          child: CustomPaint( // Has CustomPaint - HeartWidgetPainter as the child.
+            painter: painter,
+            size: Size( // Size restricted to match the dimension of challenge.
+              MediaQuery.of(context).size.width * 0.80, 
+              MediaQuery.of(context).size.height * 0.40
+            ),
+          ),
+        );
       },
-      child: CustomPaint(
-        key: _widgetKey,
-        painter: painter,
-        size: Size(MediaQuery.of(context).size.width * 0.80, MediaQuery.of(context).size.height * 0.40),
-      ),
     );
   }
 }
