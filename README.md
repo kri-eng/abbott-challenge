@@ -51,3 +51,27 @@ Follow the steps below to set up and run the project locally:
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/kri-eng/abbott-challenge.git
+```
+
+### 2. Install Dependencies
+```bash
+flutter pub get
+```
+
+### 3. Run the App
+```bash
+flutter run
+```
+---
+
+## Test the View Model
+
+Run the test in order to verify logic and maintain code coverage:
+
+---
+
+```bash
+flutter test test/ui/models/heart_view_model_test.dart
+```
+
+---
