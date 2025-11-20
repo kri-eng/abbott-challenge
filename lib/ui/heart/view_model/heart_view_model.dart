@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:challenge/data/services/heart_fill_service.dart';
+import 'package:challenge/domain/interfaces/heart_fill_service_interface.dart';
 import 'package:challenge/domain/models/heart_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,13 +18,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// startup. The VM also implements many other fucntion that are responsible for starting the counter
 /// i.e. alerting the service to start the timer, pause counter, reset counter, and pauseAndReset counter - 
 /// utlized heavily when tapping heart widget. The HeartViewModal also contains a dispose method.
+/// 
+/// UPDATE: The HeartViewModel now takes in HeartFillServiceInterface as an argument instead of HeartFillService.
+/// This conforms to the interface implementation.
 class HeartViewModel{
-  HeartViewModel({HeartFillService? heartFillService}): _heartFillService = heartFillService ?? HeartFillService() { // Initializes service
+  HeartViewModel({HeartFillServiceInterface? heartFillService}): _heartFillService = heartFillService ?? HeartFillService() { // Initializes service
     _loadState(); // Loads the persisted state
   }
 
   final ValueNotifier<HeartModel> state = ValueNotifier<HeartModel>(const HeartModel(percentage: 0, timerRunning: false)); // Creates a value notifier.
-  final HeartFillService _heartFillService; // service declaration.
+  final HeartFillServiceInterface _heartFillService; // UPDATE: service interface declaration.
 
   Future<void> _saveState() async {
     final prefs = await SharedPreferences.getInstance();  // Get the current SP instance and saves key-value in it.
