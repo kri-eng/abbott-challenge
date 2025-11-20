@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'package:challenge/data/services/heart_fill_service.dart';
-import 'package:challenge/domain/interfaces/heart_fill_service_interface.dart';
+import 'package:challenge/data/repositories/heart_fill_repository.dart';
 import 'package:challenge/domain/models/heart_model.dart';
-import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';  
 
 /// HeartViewModel
 /// 
@@ -21,42 +19,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 
 /// UPDATE: The HeartViewModel now takes in HeartFillServiceInterface as an argument instead of HeartFillService.
 /// This conforms to the interface implementation.
+/// 
+/// UPDATE 2: The HeartViewModel now uses the HeartFillRepo service. NOTE: This is updated as this was also a mistake 
+/// pointed out by the interviewer. Even though not mentioned in the correction by Ryan 
+/// on November 20th. I wanted to correct the mistake that I conducted
 class HeartViewModel{
-  HeartViewModel({HeartFillServiceInterface? heartFillService}): _heartFillService = heartFillService ?? HeartFillService() { // Initializes service
-    _loadState(); // Loads the persisted state
+  HeartViewModel({HeartFillRepository? heartFillRepo}): _heartFillRepo = heartFillRepo ?? HeartFillRepository() { // Initializes service
+    _initVMState();
   }
 
   final ValueNotifier<HeartModel> state = ValueNotifier<HeartModel>(const HeartModel(percentage: 0, timerRunning: false)); // Creates a value notifier.
-  final HeartFillServiceInterface _heartFillService; // UPDATE: service interface declaration.
+  final HeartFillRepository _heartFillRepo; // UPDATE: service interface declaration.
 
-  Future<void> _saveState() async {
-    final prefs = await SharedPreferences.getInstance();  // Get the current SP instance and saves key-value in it.
-    await prefs.setInt('percentage', state.value.percentage);
-    await prefs.setBool('timerRunning', state.value.timerRunning);
-  }
+  Future<void> _initVMState() async {
+    final storedState = await _heartFillRepo.loadState();
+    state.value = storedState;
 
-  Future<void> _loadState() async {
-    final prefs = await SharedPreferences.getInstance();  // Get the current SP instance and gets key-value from it.
-    final percentage = prefs.getInt('percentage') ?? 0;
-    final timerRunning = prefs.getBool('timerRunning') ?? false;
-
-    state.value = HeartModel(percentage: percentage, timerRunning: timerRunning); // Creates a HeartModel state value for notifier.
-
-    if (percentage < 100 && timerRunning) { // If the app was closed and the timer was still runnning, when the app is
-      startCounter();                       // opened the timer will keep on running.
+    if(storedState.timerRunning && storedState.percentage < 100) {
+      startCounter();
     }
   }
 
   // Starts the initial counter
   void startCounter() {
     state.value = state.value.copyWith(timerRunning: true); // Updates the state.value and saves it
-    _saveState();
+    _heartFillRepo.saveState(state.value);
 
-    _heartFillService.startCounter( // Calls service in order to start the counter.
+    _heartFillRepo.startCounter( // Calls service in order to start the counter.
      currentPercentage: state.value.percentage,
      onIncrement: (newPercentage) { // OnIncrement callback.
        state.value = state.value.copyWith(percentage: newPercentage);
-       _saveState();  
+       _heartFillRepo.saveState(state.value);
      }, 
      onComplete: () { // OnComplete callback.
        pauseCounter();
@@ -65,16 +58,18 @@ class HeartViewModel{
 
   }
 
+  // Pause the repo timer.
   void pauseCounter() {
-    _heartFillService.stopCounter();  // Calls the service to pause counetr, then saves the state of timer.
+    _heartFillRepo.stopCounter();  // Calls the service to pause counetr, then saves the state of timer.
     state.value = state.value.copyWith(timerRunning: false);
-    _saveState();
+    _heartFillRepo.saveState(state.value);
   }
 
+  // Reset the repo timer, and save the state.
   void resetCounter() {
-    _heartFillService.stopCounter();  // Calls the service to stop counter and saves the state of percentage and timerRunning.
+   _heartFillRepo.stopCounter();  // Calls the service to stop counter and saves the state of percentage and timerRunning.
     state.value = const HeartModel(percentage: 0, timerRunning: false);
-    _saveState();
+    _heartFillRepo.saveState(state.value);
   }
 
   /// Utilized byt the Gesture Detector in order to pause and resume the timer.
@@ -88,7 +83,7 @@ class HeartViewModel{
 
   // Dispose method in order to dispose the service as well as the current state.
   void dispose() {
-    _heartFillService.dispose();
+    _heartFillRepo.dispose();
     state.dispose();
   }
 }

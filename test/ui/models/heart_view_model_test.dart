@@ -1,3 +1,4 @@
+import 'package:challenge/data/repositories/heart_fill_repository.dart';
 import 'package:challenge/ui/heart/view_model/heart_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +13,11 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     fakeHeartFillService = FakeHeartFillService();
-    heartViewModel = HeartViewModel(heartFillService: fakeHeartFillService);
+    heartViewModel = HeartViewModel(
+      heartFillRepo: HeartFillRepository(
+        heartFillService: fakeHeartFillService
+      )
+    );
   });
 
   tearDown(() {
